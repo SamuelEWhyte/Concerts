@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --page-max: 72rem;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+@layer components {
+  .app-card {
+    @apply card bg-base-100 shadow-sm rounded-2xl border border-base-200/60 transition-all duration-200;
+  }
+
+  .app-card-interactive {
+    @apply app-card hover:shadow-md hover:-translate-y-0.5;
+  }
+
+  .page-section {
+    @apply space-y-8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in,
+  .fade-in,
+  .slide-in-from-bottom-2 {
+    animation: none !important;
+  }
+
+  .app-card-interactive {
+    transform: none !important;
+  }
+}

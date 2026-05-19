@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" fill="none" aria-hidden="true">
+  <rect width="400" height="280" fill="transparent"/>
+  <circle cx="200" cy="120" r="48" fill="currentColor" fill-opacity="0.08"/>
+  <path d="M160 120 L200 88 L240 120 L240 168 L160 168 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round" fill="currentColor" fill-opacity="0.12"/>
+  <path d="M175 145 Q200 165 225 145" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <circle cx="185" cy="108" r="4" fill="currentColor" fill-opacity="0.5"/>
+  <circle cx="215" cy="108" r="4" fill="currentColor" fill-opacity="0.5"/>
+  <path d="M120 200 H280" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-opacity="0.3"/>
+  <text x="200" y="230" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-family="system-ui,sans-serif" font-size="14">No concerts yet</text>
+</svg>
