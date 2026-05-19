@@ -5,9 +5,12 @@ export type Concert = {
   user_id: string;
   artist: string;
   venue: string;
+  city: string | null;
+  state: string | null;
   concert_date: string;
   fun_rating: number;
   notes: string | null;
+  duration_hours: number | null;
   created_at: string;
 };
 

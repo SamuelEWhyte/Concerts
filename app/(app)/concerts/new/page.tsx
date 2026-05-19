@@ -10,7 +10,7 @@ export default function NewConcertPage() {
           title="Add a concert"
           subtitle="Log a show you went to, what you spent, and how much fun you had."
         />
-        <ConcertForm />
+        <ConcertForm mode="create" />
       </div>
     </PageContainer>
   );

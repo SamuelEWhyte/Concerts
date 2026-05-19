@@ -1,5 +1,5 @@
 import { DashboardCharts } from "@/components/DashboardCharts";
-import { ConcertList } from "@/components/ConcertList";
+import { BadgeGrid } from "@/components/BadgeGrid";
 import { PageContainer } from "@/components/PageContainer";
 import { PageHeader } from "@/components/PageHeader";
 import { DashboardStats } from "@/components/DashboardStats";
@@ -75,7 +75,7 @@ export default async function DashboardPage({
           />
         </section>
 
-        <ConcertList concerts={concerts} />
+        <BadgeGrid concerts={concerts} />
       </div>
     </PageContainer>
   );

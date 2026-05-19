@@ -10,6 +10,7 @@ import { CATEGORY_LABELS, type CostCategory } from "@/lib/constants";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { EmptyConcerts } from "./EmptyConcerts";
 import { StarRating } from "./StarRating";
+import { ConcertCardActions } from "./ConcertCardActions";
 
 export function ConcertList({ concerts }: { concerts: ConcertWithCosts[] }) {
   const [parent] = useAutoAnimate();
@@ -43,6 +44,11 @@ function ConcertCard({ concert }: { concert: ConcertWithCosts }) {
             <p className="text-sm text-base-content/70">{concert.venue}</p>
             <p className="mt-0.5 text-sm text-base-content/60">
               {formatDate(concert.concert_date)}
+              {concert.city && concert.state && (
+                <span className="block">
+                  {concert.city}, {concert.state}
+                </span>
+              )}
             </p>
           </div>
           <div className="flex flex-col items-end gap-2">
@@ -78,6 +84,8 @@ function ConcertCard({ concert }: { concert: ConcertWithCosts }) {
             </li>
           ))}
         </ul>
+
+        <ConcertCardActions concertId={concert.id} />
       </div>
     </article>
   );

@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, PlusCircle } from "lucide-react";
+import { LayoutDashboard, Map, Music, PlusCircle } from "lucide-react";
 
 const links = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { href: "/concerts", label: "My concerts", icon: Music, exact: false },
+  { href: "/map", label: "Map view", icon: Map, exact: true },
   { href: "/concerts/new", label: "Add concert", icon: PlusCircle, exact: false },
 ];
 

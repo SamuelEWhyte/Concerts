@@ -3,13 +3,15 @@
 import { useActionState, useState } from "react";
 import {
   createConcert,
+  updateConcert,
   type ConcertFormState,
-} from "@/app/concerts/new/actions";
-import { COST_CATEGORIES } from "@/lib/constants";
+} from "@/app/concerts/actions";
+import { COST_CATEGORIES, US_STATES } from "@/lib/constants";
 import { FunRatingInput } from "./FunRatingInput";
 import { AlertBanner } from "./AlertBanner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Plus } from "lucide-react";
+import type { ConcertWithCosts } from "@/lib/types";
 
 type CostRow = {
   id: string;
@@ -18,22 +20,43 @@ type CostRow = {
   description: string;
 };
 
-function newRow(): CostRow {
+function newRow(cost?: { category: string; amount: string; description: string }): CostRow {
   return {
     id: crypto.randomUUID(),
-    category: "ticket",
-    amount: "",
-    description: "",
+    category: cost?.category ?? "ticket",
+    amount: cost?.amount ?? "",
+    description: cost?.description ?? "",
   };
 }
 
-export function ConcertForm() {
+type ConcertFormProps = {
+  mode: "create" | "edit";
+  concert?: ConcertWithCosts;
+};
+
+export function ConcertForm({ mode, concert }: ConcertFormProps) {
+  const action =
+    mode === "create"
+      ? createConcert
+      : updateConcert.bind(null, concert!.id);
+
   const [state, formAction, pending] = useActionState<
     ConcertFormState,
     FormData
-  >(createConcert, {});
-  const [funRating, setFunRating] = useState(4);
-  const [costRows, setCostRows] = useState<CostRow[]>([newRow()]);
+  >(action, {});
+
+  const [funRating, setFunRating] = useState(concert?.fun_rating ?? 4);
+  const [costRows, setCostRows] = useState<CostRow[]>(() => {
+    const costs = concert?.concert_costs ?? [];
+    if (costs.length === 0) return [newRow()];
+    return costs.map((c) =>
+      newRow({
+        category: c.category,
+        amount: String(c.amount),
+        description: c.description ?? "",
+      })
+    );
+  });
   const [costsParent] = useAutoAnimate();
 
   const addRow = () => setCostRows((rows) => [...rows, newRow()]);
@@ -65,6 +88,7 @@ export function ConcertForm() {
               type="text"
               name="artist"
               required
+              defaultValue={concert?.artist}
               className="input input-bordered input-primary mt-1 w-full"
               placeholder="Who did you see?"
             />
@@ -75,24 +99,72 @@ export function ConcertForm() {
               type="text"
               name="venue"
               required
+              defaultValue={concert?.venue}
               className="input input-bordered input-primary mt-1 w-full"
-              placeholder="Where was the show?"
+              placeholder="Madison Square Garden"
             />
           </label>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="form-control w-full">
+              <span className="label-text font-medium">City</span>
+              <input
+                type="text"
+                name="city"
+                required
+                defaultValue={concert?.city ?? ""}
+                className="input input-bordered input-primary mt-1 w-full"
+                placeholder="New York"
+              />
+            </label>
+            <label className="form-control w-full">
+              <span className="label-text font-medium">State</span>
+              <select
+                name="state"
+                required
+                defaultValue={concert?.state ?? ""}
+                className="select select-bordered select-primary mt-1 w-full"
+              >
+                <option value="" disabled>
+                  Select state
+                </option>
+                {US_STATES.map((s) => (
+                  <option key={s.code} value={s.code}>
+                    {s.code} — {s.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
           <label className="form-control w-full">
             <span className="label-text font-medium">Date</span>
             <input
               type="date"
               name="concert_date"
               required
+              defaultValue={concert?.concert_date}
               className="input input-bordered input-primary mt-1 w-full"
             />
           </label>
           <FunRatingInput value={funRating} onChange={setFunRating} />
           <label className="form-control w-full">
+            <span className="label-text font-medium">
+              Hours at show (optional, for Night Owl badge)
+            </span>
+            <input
+              type="number"
+              name="duration_hours"
+              min="0"
+              step="0.5"
+              defaultValue={concert?.duration_hours ?? ""}
+              className="input input-bordered input-primary mt-1 w-full"
+              placeholder="e.g. 3"
+            />
+          </label>
+          <label className="form-control w-full">
             <span className="label-text font-medium">Notes (optional)</span>
             <textarea
               name="notes"
+              defaultValue={concert?.notes ?? ""}
               className="textarea textarea-bordered textarea-primary mt-1 w-full"
               rows={3}
               placeholder="Anything you want to remember..."
@@ -185,10 +257,12 @@ export function ConcertForm() {
         {pending ? (
           <>
             <span className="loading loading-spinner" />
-            Saving…
+            {mode === "create" ? "Saving…" : "Updating…"}
           </>
-        ) : (
+        ) : mode === "create" ? (
           "Save concert"
+        ) : (
+          "Save changes"
         )}
       </button>
     </form>
